@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, ViewTransition } from "react";
 import type { Work } from "@/content/work";
 
 /** Degrees between neighbouring cards on the cylinder. */
@@ -263,31 +263,42 @@ export function Carousel({ items }: { items: Work[] }) {
                 }}
                 className="group relative block h-full w-full overflow-hidden rounded-[clamp(18px,2.2vw,30px)] bg-neutral-900 outline-offset-8"
               >
-                <Image
-                  src={w.cover}
-                  alt=""
-                  fill
-                  draggable={false}
-                  sizes="(max-width: 640px) 80vw, 860px"
-                  priority={i < 2 || i === n - 1}
-                  className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.03]"
-                />
-                <span
-                  aria-hidden
-                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10"
-                />
+                {/* Only the front card shares names with the project page, so it alone morphs. */}
+                <Shared name={i === active ? `cover-${w.slug}` : undefined}>
+                  <span className="absolute inset-0 block">
+                    <Image
+                      src={w.cover}
+                      alt=""
+                      fill
+                      draggable={false}
+                      sizes="(max-width: 640px) 80vw, 860px"
+                      priority={i < 2 || i === n - 1}
+                      className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.03]"
+                    />
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10"
+                    />
+                  </span>
+                </Shared>
                 {w.mark && (
-                  <Image
-                    src={w.mark}
-                    alt=""
-                    width={240}
-                    height={240}
-                    draggable={false}
-                    className="absolute left-1/2 top-[44%] w-[24%] max-w-[180px] -translate-x-1/2 -translate-y-1/2 rounded-[22.5%] shadow-[0_30px_60px_-20px_rgb(0_0_0/0.7)]"
-                  />
+                  <span className="absolute left-1/2 top-[44%] block w-[24%] max-w-[180px] -translate-x-1/2 -translate-y-1/2">
+                    <Shared name={i === active ? `mark-${w.slug}` : undefined}>
+                      <Image
+                        src={w.mark}
+                        alt=""
+                        width={240}
+                        height={240}
+                        draggable={false}
+                        className="block w-full rounded-[22.5%] shadow-[0_30px_60px_-20px_rgb(0_0_0/0.7)]"
+                      />
+                    </Shared>
+                  </span>
                 )}
                 <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-[clamp(16px,2.4vw,32px)]">
-                  <span className="text-[clamp(22px,2.6vw,40px)] leading-none font-medium tracking-tight">{w.title}</span>
+                  <Shared name={i === active ? `title-${w.slug}` : undefined}>
+                    <span className="text-[clamp(22px,2.6vw,40px)] leading-none font-medium tracking-tight">{w.title}</span>
+                  </Shared>
                   <span className="hidden text-[15px] text-bone/70 md:block">{w.discipline}</span>
                 </span>
                 {/* Side cards sink into the dark. */}
@@ -332,6 +343,15 @@ export function Carousel({ items }: { items: Work[] }) {
         {current.title}, {active + 1} of {n}
       </p>
     </section>
+  );
+}
+
+function Shared({ name, children }: { name?: string; children: React.ReactNode }) {
+  if (!name) return children;
+  return (
+    <ViewTransition name={name} share="morph" default="none">
+      {children}
+    </ViewTransition>
   );
 }
 

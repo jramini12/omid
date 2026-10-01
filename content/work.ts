@@ -109,27 +109,6 @@ export const work: Work[] = [
     featured: true,
   },
   {
-    slug: "handback",
-    title: "Handback",
-    discipline: "Apps",
-    year: 2026,
-    line: "See your end-of-lease mileage bill today.",
-    summary:
-      "Most UK lease drivers only find out what they owe when the handback invoice lands. Enter your lease terms once, log the odometer now and then, and Handback shows the number in pounds, not miles, with a daily budget to stay under it.",
-    highlights: [
-      "A ring gauge: under, on track or over",
-      "Daily mileage budget against what you actually drive",
-      "Projected excess charge in pounds",
-      "A gentle weekly reminder to log your miles",
-    ],
-    platforms: "iPhone",
-    mark: "/apps/handback.png",
-    cover: "/photos/handback.jpg",
-    coverCredit: { name: "Nirmal Rajendharkumar", username: "neotronimz" },
-    link: { label: "Visit the Handback site", href: "https://website-pi-two-65.vercel.app" },
-    featured: true,
-  },
-  {
     slug: "dpsi-law",
     title: "DPSI Law",
     discipline: "Apps",

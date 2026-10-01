@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ViewTransition } from "react";
 import { Chrome } from "@/components/Chrome";
 import { getWork, work } from "@/content/work";
 
@@ -26,10 +27,15 @@ export default async function WorkPage({ params }: PageProps<"/work/[slug]">) {
     <div className="relative">
       <Chrome fixed={false} />
       <main id="main">
-        <div className="relative h-[72svh] min-h-[420px] overflow-hidden">
-          <Image src={w.cover} alt="" fill priority sizes="100vw" className="object-cover" />
-          <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/10 to-black" />
+        <ViewTransition name={`cover-${w.slug}`} share="morph" default="none">
+          <div className="relative h-[72svh] min-h-[420px] overflow-hidden">
+            <Image src={w.cover} alt="" fill priority sizes="100vw" className="object-cover" />
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/10 to-black" />
+          </div>
+        </ViewTransition>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[72svh] min-h-[420px]">
           {w.mark && (
+            <ViewTransition name={`mark-${w.slug}`} share="morph" default="none">
             <Image
               src={w.mark}
               alt={`${w.title} app icon`}
@@ -38,11 +44,16 @@ export default async function WorkPage({ params }: PageProps<"/work/[slug]">) {
               priority
               className="absolute left-1/2 top-1/2 w-[clamp(110px,16vw,200px)] -translate-x-1/2 -translate-y-1/2 rounded-[22.5%] shadow-[0_40px_80px_-24px_rgb(0_0_0/0.8)]"
             />
+            </ViewTransition>
           )}
         </div>
 
         <article className="mx-auto -mt-[clamp(40px,8vw,110px)] max-w-5xl px-5 pb-24 sm:px-8 relative">
-          <h1 className="text-[clamp(56px,11vw,150px)] leading-[0.9] font-medium tracking-[-0.045em] text-balance">{w.title}</h1>
+          <ViewTransition name={`title-${w.slug}`} share="morph" default="none">
+            <h1 className="w-fit text-[clamp(56px,11vw,150px)] leading-[0.9] font-medium tracking-[-0.045em] text-balance">
+              {w.title}
+            </h1>
+          </ViewTransition>
           <p className="mt-6 max-w-[28ch] text-balance text-[clamp(22px,2.6vw,32px)] leading-tight tracking-tight text-bone/85">
             {w.line}
           </p>
@@ -102,11 +113,38 @@ export default async function WorkPage({ params }: PageProps<"/work/[slug]">) {
             </dl>
           </div>
 
-          <nav aria-label="Next project" className="mt-28 mb-16 border-t border-bone/10 pt-8">
+          <nav aria-label="Next project" className="mt-28 mb-16">
             <Link href={`/work/${next.slug}`} className="group block">
               <span className="text-[15px] text-ash">Next</span>
-              <span className="mt-1 block text-[clamp(40px,7vw,96px)] leading-none font-medium tracking-[-0.04em] transition-colors group-hover:text-dawn">
-                {next.title}
+              <ViewTransition name={`cover-${next.slug}`} share="morph" default="none">
+                <span className="relative mt-4 block h-[clamp(220px,38vw,420px)] overflow-hidden rounded-[clamp(18px,2.2vw,30px)]">
+                  <Image
+                    src={next.cover}
+                    alt=""
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.03]"
+                  />
+                  <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
+                </span>
+              </ViewTransition>
+              <span className="relative -mt-[clamp(72px,9vw,118px)] flex items-end justify-between gap-6 px-[clamp(16px,2.4vw,32px)] pb-[clamp(16px,2.4vw,32px)]">
+                <ViewTransition name={`title-${next.slug}`} share="morph" default="none">
+                  <span className="block w-fit text-[clamp(40px,7vw,96px)] leading-[0.9] font-medium tracking-[-0.04em]">
+                    {next.title}
+                  </span>
+                </ViewTransition>
+                {next.mark && (
+                  <ViewTransition name={`mark-${next.slug}`} share="morph" default="none">
+                    <Image
+                      src={next.mark}
+                      alt=""
+                      width={160}
+                      height={160}
+                      className="w-[clamp(52px,6vw,80px)] rounded-[22.5%] shadow-[0_20px_40px_-16px_rgb(0_0_0/0.8)]"
+                    />
+                  </ViewTransition>
+                )}
               </span>
             </Link>
           </nav>
