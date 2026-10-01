@@ -29,7 +29,17 @@ export function Chrome({ fixed = true }: { fixed?: boolean }) {
             امید
           </span>
         </Link>
-        <nav aria-label="About">{view("/profile", "Profile")}</nav>
+        <nav aria-label="About" className="flex gap-6">
+          <a
+            href="https://www.instagram.com/omid_96a/"
+            target="_blank"
+            rel="noreferrer"
+            className="opacity-50 transition-opacity duration-300 hover:opacity-100"
+          >
+            Instagram<span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          {view("/profile", "Profile")}
+        </nav>
       </header>
       <footer className={`${pos} bottom-0 left-0 z-30 p-5 text-[15px] sm:p-8 md:px-12`}>
         <nav aria-label="Views" className="flex gap-2">

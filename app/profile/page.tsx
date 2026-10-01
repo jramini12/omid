@@ -9,13 +9,13 @@ export default function Profile() {
   const apps = work.filter((w) => w.discipline === "Apps").length;
 
   return (
-    <>
-      <Chrome />
+    <div className="relative">
+      <Chrome fixed={false} />
       <main id="main" className="relative min-h-dvh overflow-hidden">
         <div className="sky" aria-hidden />
         <div className="horizon-glow" aria-hidden />
 
-        <div className="relative z-10 mx-auto grid min-h-dvh max-w-6xl content-center gap-14 px-5 py-36 sm:px-8 md:grid-cols-[1.1fr_1fr] md:items-end">
+        <div className="relative z-10 mx-auto grid min-h-dvh max-w-6xl content-center gap-14 px-5 pt-36 pb-28 sm:px-8 sm:py-36 md:grid-cols-[1.1fr_1fr] md:items-end">
           <h1 className="leading-none">
             <span
               lang="fa"
@@ -39,13 +39,21 @@ export default function Profile() {
               Photographs and clothing are next. T-shirts, prints and whatever else turns up in the
               sketchbook will land here as they are made.
             </p>
-            <p>
+            <p className="flex flex-wrap gap-x-6 gap-y-2">
               <Link
                 href="/"
                 className="underline decoration-bone/30 underline-offset-4 transition-colors hover:decoration-dawn"
               >
                 See the work
               </Link>
+              <a
+                href="https://www.instagram.com/omid_96a/"
+                target="_blank"
+                rel="noreferrer"
+                className="underline decoration-bone/30 underline-offset-4 transition-colors hover:decoration-dawn"
+              >
+                Follow @omid_96a on Instagram<span className="sr-only"> (opens in a new tab)</span>
+              </a>
             </p>
           </div>
         </div>
@@ -60,6 +68,6 @@ export default function Profile() {
           </a>
         </p>
       </main>
-    </>
+    </div>
   );
 }
