@@ -1,26 +1,119 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-night: #000000;
+  --color-bone: #edebe6;
+  --color-ash: #8a8a86;
+  --color-dawn: #f2a65a;
+  --color-dusk: #2b3a67;
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-farsi: var(--font-farsi), var(--font-grotesk), sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-night);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100dvh;
+}
+
+::selection {
+  background: var(--color-dawn);
+  color: var(--color-night);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-dawn);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 0.875rem;
+  background: var(--color-bone);
+  color: var(--color-night);
+  border-radius: 999px;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- Horizon: the one orchestrated moment ---------- */
+
+.sky {
+  position: absolute;
+  inset: 0;
+  background: url("/photos/dawn.jpg") center 58% / cover no-repeat;
+  opacity: 0;
+  filter: saturate(1.1);
+  animation: first-light 3.2s cubic-bezier(0.2, 0.7, 0.1, 1) 0.2s forwards;
+  mask-image: linear-gradient(to bottom, transparent 8%, #000 45%, #000 58%, transparent 80%);
+}
+
+.horizon-glow {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 58%;
+  height: 40vh;
+  translate: 0 -50%;
+  background: radial-gradient(
+    50% 18% at 50% 50%,
+    rgb(242 166 90 / 0.55),
+    rgb(242 166 90 / 0.12) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  scale: 1 0.4;
+  animation: first-light-glow 3.6s cubic-bezier(0.2, 0.7, 0.1, 1) 0.5s forwards;
+  pointer-events: none;
+}
+
+.floor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  top: 58%;
+  height: 120vh;
+  transform-origin: top center;
+  transform: perspective(70vh) rotateX(72deg);
+  background-image:
+    linear-gradient(to right, rgb(237 235 230 / 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(237 235 230 / 0.1) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: var(--floor-x, 0px) 0;
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 60%, transparent);
+  pointer-events: none;
+}
+
+@keyframes first-light {
+  to {
+    opacity: 0.6;
+  }
+}
+@keyframes first-light-glow {
+  to {
+    opacity: 1;
+    scale: 1 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky {
+    animation: none;
+    opacity: 0.6;
+  }
+  .horizon-glow {
+    animation: none;
+    opacity: 1;
+    scale: 1 1;
+  }
 }
